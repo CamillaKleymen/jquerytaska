@@ -1,5 +1,6 @@
 $(document).ready(function() {
 
+
     const products = [
         { name: 'Товар 1', price: 100, color: 'красный' },
         { name: 'Товар 2', price: 150, color: 'синий' },
@@ -7,14 +8,13 @@ $(document).ready(function() {
         { name: 'Товар 4', price: 250, color: 'черный' }
     ];
 
-
     function renderProducts() {
-        $('#products').empty();
+        $('#products').empty(); 
         products.forEach((product, index) => {
             $('#products').append(`
                 <div>
                     <h3>${product.name}</h3>
-                    <p>Цена: ${product.price} руб.</p>
+                    <p>Цена: ${product.price} USD.</p>
                     <p>Цвет: ${product.color}</p>
                     <button class="add-to-cart" data-index="${index}">Добавить в корзину</button>
                 </div>
@@ -22,12 +22,10 @@ $(document).ready(function() {
         });
     }
 
-
     function updateCart(cart) {
         localStorage.setItem('cart', JSON.stringify(cart));
     }
 
-    
     function getCart() {
         return JSON.parse(localStorage.getItem('cart')) || [];
     }
@@ -37,19 +35,19 @@ $(document).ready(function() {
         const product = products[productIndex];
         let cart = getCart();
 
-        const existingProduct = cart.find(item => item.name === product.name && item.color === product.color);
-        if (!existingProduct) {
+        const productInCart = cart.some(item => item.name === product.name && item.color === product.color);
+        if (!productInCart) {
             cart.push(product);
             updateCart(cart);
             alert('Товар добавлен в корзину');
         } else {
-            alert('Товар с таким цветом уже в корзине');
+            alert('Товар уже в корзине');
         }
     });
 
     function renderCart() {
         const cart = getCart();
-        $('#cart-items').empty();
+        $('#cart-items').empty(); 
         let totalPrice = 0;
 
         cart.forEach((item, index) => {
@@ -57,16 +55,17 @@ $(document).ready(function() {
                 <tr>
                     <td>${item.name}</td>
                     <td>${item.color}</td>
-                    <td>${item.price} руб.</td>
+                    <td>${item.price} USD.</td>
                     <td><button class="remove-from-cart" data-index="${index}">Удалить</button></td>
                 </tr>
             `);
             totalPrice += item.price;
         });
 
-        $('#total-price').text(totalPrice);
+        $('#total-price').text(totalPrice); 
     }
 
+    
     $(document).on('click', '.remove-from-cart', function() {
         const itemIndex = $(this).data('index');
         let cart = getCart();
@@ -75,6 +74,7 @@ $(document).ready(function() {
         renderCart();
     });
 
+    
     if ($('#products').length) {
         renderProducts();
     }
